@@ -5,6 +5,7 @@ import { styled } from '@mui/material';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Workspace from './components/Workspace';
+import IndexedDBProvider from './context/IndexedDBProvider';
 
 const Wrapper = styled(Box)({
   minHeight: '100vh',
@@ -15,7 +16,7 @@ const Wrapper = styled(Box)({
 
 function App() {
   return (
-    <>
+    <IndexedDBProvider>
       <CssBaseline />
       <Wrapper>
         <Header />
@@ -24,7 +25,7 @@ function App() {
           <Workspace />
         </Box>
       </Wrapper>
-    </>
+    </IndexedDBProvider>
   );
 }
 
