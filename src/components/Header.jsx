@@ -25,9 +25,15 @@ const StyledIconButton = styled(IconButton)({
 
 export default function Header() {
   return (
-    <AppBar position='static' sx={{ background: '#d1d1d1', padding: '8px 0px' }}>
+    <AppBar
+      position='static'
+      sx={{
+        background: '#d1d1d1',
+        padding: '8px 0px',
+        zIndex: (theme) => theme.zIndex.drawer + 1
+      }}>
       <Container maxWidth='xl'>
-        <Box sx={{ display: 'flex', flexGlow: '1' }}>
+        <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex', gap: '8px' }}>
             <StyledIconButton>
               <AddIcon />
