@@ -1,7 +1,16 @@
-import React from 'react';
-import { Drawer, Box, List, ListItem, ListItemText } from '@mui/material';
+import React, { useContext } from 'react';
+import { Drawer, Box, List } from '@mui/material';
+import ListItem from './ListItem';
+import IndexedDBContext from '../context/IndexedDBContext';
 
 export default function Sidebar() {
+  const { data } = useContext(IndexedDBContext);
+
+  const dataLength = data.length;
+
+  const notesList = [...data]
+    .reverse()
+    .map((note) => <ListItem key={note.id} noteData={note}></ListItem>);
   return (
     <Drawer
       variant='permanent'
@@ -11,35 +20,15 @@ export default function Sidebar() {
         [`& .MuiDrawer-paper`]: { width: 300, boxSizing: 'border-box' }
       }}>
       <Box sx={{ minHeight: '50px' }} />
-      <Box>
-        <List sx={{ padding: '0px' }}>
-          {[
-            'Note1',
-            'Note2',
-            'Note3',
-            'Note4',
-            'Note5',
-            'Note6',
-            'Note7',
-            'Note8',
-            'Note9',
-            'Note10',
-            'Note11',
-            'Note12',
-            'Note13'
-          ].map((text) => (
-            <ListItem
-              key={text}
-              sx={{
-                cursor: 'pointer'
-              }}>
-              <Box>
-                <ListItemText primary={text} />
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+      {dataLength ? (
+        <Box>
+          <List sx={{ padding: '0px' }}>{notesList}</List>
+        </Box>
+      ) : (
+        <Box sx={{ textAlign: 'center', padding: '10px 5px', color: '#636363' }}>
+          You haven't added any note yet!
+        </Box>
+      )}
     </Drawer>
   );
 }

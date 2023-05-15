@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-restricted-globals */
+import React, { useContext } from 'react';
 import { AppBar, Container, Box, IconButton } from '@mui/material';
 import {
   DeleteOutlined as DeleteIcon,
@@ -6,7 +7,7 @@ import {
   EditNoteRounded as EditNoteIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material';
-import SearchBox from './SearchBox';
+import IndexedDBContext from '../context/IndexedDBContext';
 
 const StyledIconButton = styled(IconButton)({
   flex: '0 0 auto',
@@ -16,7 +17,7 @@ const StyledIconButton = styled(IconButton)({
   color: '#4c4c4c',
   fontSize: '1.5rem',
   '&:hover': {
-    backgroundColor: '#85c7f2'
+    backgroundColor: '#fafaf8'
   },
   '&:disabled': {
     background: '#fafaf8'
@@ -24,6 +25,15 @@ const StyledIconButton = styled(IconButton)({
 });
 
 export default function Header() {
+  const { addToIndexedDB, currentId, deleteFromIndexedDB, setIsEditing, isEditing } =
+    useContext(IndexedDBContext);
+
+  const deleteElement = () => {
+    const deleteElement = confirm('Delete note?');
+    if (deleteElement) {
+      deleteFromIndexedDB(currentId);
+    }
+  };
   return (
     <AppBar
       position='static'
@@ -34,24 +44,23 @@ export default function Header() {
       }}>
       <Container maxWidth='xl'>
         <Box sx={{ display: 'flex' }}>
-          <Box sx={{ display: 'flex', gap: '8px' }}>
-            <StyledIconButton>
-              <AddIcon />
-            </StyledIconButton>
-            <StyledIconButton>
-              <DeleteIcon />
-            </StyledIconButton>
-            <StyledIconButton>
-              <EditNoteIcon />
-            </StyledIconButton>
-          </Box>
           <Box
             sx={{
-              flexGrow: '1',
               display: 'flex',
-              justifyContent: 'end'
+              gap: '8px'
             }}>
-            <SearchBox />
+            <StyledIconButton onClick={addToIndexedDB}>
+              <AddIcon />
+            </StyledIconButton>
+            <StyledIconButton onClick={deleteElement} disabled={!currentId}>
+              <DeleteIcon />
+            </StyledIconButton>
+            <StyledIconButton
+              onClick={() => setIsEditing(!isEditing)}
+              disabled={!currentId}
+              sx={{ backgroundColor: isEditing ? '#85c7f2' : '#fafaf8' }}>
+              <EditNoteIcon />
+            </StyledIconButton>
           </Box>
         </Box>
       </Container>

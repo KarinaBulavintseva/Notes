@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-import ReactQuill from 'react-quill';
-
+import IndexedDBContext from '../context/IndexedDBContext';
 import { styled } from '@mui/material';
+import { getFullDate } from '../utils/utils';
 
-const StyledQuillBox = styled(Box)({
-  '.quill': {
-    flexGrow: 1
-  },
-  '.ql-container.ql-snow': {
-    fontSize: '18px'
-  }
+const StyledTextField = styled(Box)({
+  outline: 'none',
+  flexGrow: '1',
+  resize: 'none',
+  border: 'none',
+  fontSize: '18px'
 });
 
 export default function Workspace() {
-  const modules = { toolbar: null };
+  const { data, updateInIndexedDB, currentId, isEditing } = useContext(IndexedDBContext);
+
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    const currentElement = data.find((item) => item.id === currentId);
+
+    if (currentElement) {
+      setText(currentElement.text);
+    }
+
+    if (!data.length || !currentElement) {
+      setText('');
+    }
+  }, [currentId, data]);
+
+  const date = getFullDate(currentId);
+
+  const changeText = (event) => {
+    const noteText = event.target.value;
+    setText(noteText);
+    updateInIndexedDB(currentId, noteText);
+  };
 
   return (
     <Box
@@ -23,19 +44,25 @@ export default function Workspace() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-      <Box
-        sx={{
-          padding: '8px 0',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: '#4c4c4c'
-        }}>
-        May 10, 2018 at 12:00 PM
+      {currentId && (
+        <Box
+          sx={{
+            padding: '8px 0',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#636363'
+          }}>
+          {date}
+        </Box>
+      )}
+      <Box sx={{ display: 'flex', flexGrow: '1', padding: '20px 30px' }}>
+        <StyledTextField
+          component='textarea'
+          value={text}
+          onChange={changeText}
+          readOnly={!isEditing}></StyledTextField>
       </Box>
-      <StyledQuillBox sx={{ display: 'flex', flexGrow: '1' }}>
-        <ReactQuill modules={modules} theme='snow' />
-      </StyledQuillBox>
     </Box>
   );
 }

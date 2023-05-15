@@ -3,8 +3,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material';
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 import Workspace from './components/Workspace';
+import Sidebar from './components/Sidebar';
 import IndexedDBProvider from './context/IndexedDBProvider';
 
 const Wrapper = styled(Box)({

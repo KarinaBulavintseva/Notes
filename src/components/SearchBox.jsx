@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material';
 import { SearchRounded as SearchIcon } from '@mui/icons-material';
 import InputBase from '@mui/material/InputBase';
+import IndexedDBContext from '../context/IndexedDBContext';
 
 const Search = styled(Box)({
   width: 'min(60%, 300px)',
@@ -31,12 +32,13 @@ const StyledInputBase = styled(InputBase)({
 });
 
 export default function SearchBox() {
+  const { filterData } = useContext(IndexedDBContext);
   return (
     <Search>
       <SearchIconWrapper>
         <StyledSearchIcon />
       </SearchIconWrapper>
-      <StyledInputBase placeholder='Search…' />
+      <StyledInputBase placeholder='Search…' onChange={(event) => filterData(event.target.value)} />
     </Search>
   );
 }
