@@ -7,7 +7,12 @@ import {
   EditNoteRounded as EditNoteIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
 import IndexedDBContext from '../context/IndexedDBContext';
+import SearchBox from './SearchBox';
 
 const StyledIconButton = styled(IconButton)({
   flex: '0 0 auto',
@@ -25,8 +30,18 @@ const StyledIconButton = styled(IconButton)({
 });
 
 export default function Header() {
-  const { addToIndexedDB, currentId, deleteFromIndexedDB, setIsEditing, isEditing } =
-    useContext(IndexedDBContext);
+  const theme = useTheme();
+  const isUpSmallScreens = useMediaQuery(theme.breakpoints.up('sm'));
+
+  const {
+    addToIndexedDB,
+    currentId,
+    deleteFromIndexedDB,
+    setIsEditing,
+    isEditing,
+    openDrawer,
+    setOpenDrawer
+  } = useContext(IndexedDBContext);
 
   const deleteElement = () => {
     const deleteElement = confirm('Delete note?');
@@ -44,10 +59,19 @@ export default function Header() {
       }}>
       <Container maxWidth='xl'>
         <Box sx={{ display: 'flex' }}>
+          {!isUpSmallScreens && (
+            <Box>
+              <IconButton onClick={() => setOpenDrawer(!openDrawer)}>
+                {openDrawer ? <KeyboardArrowLeftRoundedIcon /> : <MenuRoundedIcon />}
+              </IconButton>
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
-              gap: '8px'
+              gap: '8px',
+              flexGrow: isUpSmallScreens ? '0' : '1',
+              justifyContent: isUpSmallScreens ? 'start' : 'end'
             }}>
             <StyledIconButton onClick={addToIndexedDB}>
               <AddIcon />
@@ -62,6 +86,16 @@ export default function Header() {
               <EditNoteIcon />
             </StyledIconButton>
           </Box>
+          {isUpSmallScreens && (
+            <Box
+              sx={{
+                flexGrow: '1',
+                display: 'flex',
+                justifyContent: 'end'
+              }}>
+              <SearchBox />
+            </Box>
+          )}
         </Box>
       </Container>
     </AppBar>

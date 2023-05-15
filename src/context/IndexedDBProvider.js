@@ -5,6 +5,7 @@ const IndexedDBProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [currentId, setCurrentId] = useState();
   const [isEditing, setIsEditing] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(true);
 
   const openIndexedDB = () => {
     return new Promise((resolve, reject) => {
@@ -155,7 +156,9 @@ const IndexedDBProvider = ({ children }) => {
         data,
         currentId,
         isEditing,
-        filterData
+        filterData,
+        openDrawer,
+        setOpenDrawer
       }}>
       {children}
     </IndexedDBContext.Provider>

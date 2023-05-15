@@ -4,9 +4,11 @@ import { styled } from '@mui/material';
 import { SearchRounded as SearchIcon } from '@mui/icons-material';
 import InputBase from '@mui/material/InputBase';
 import IndexedDBContext from '../context/IndexedDBContext';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material';
 
 const Search = styled(Box)({
-  width: 'min(60%, 300px)',
+  width: 'min(80%, 300px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -27,14 +29,15 @@ const StyledSearchIcon = styled(SearchIcon)({
 });
 
 const StyledInputBase = styled(InputBase)({
-  width: '100%',
-  '.MuiInputBase-root.MuiInputBase-input': { color: '#636363' }
+  width: '100%'
 });
 
 export default function SearchBox() {
+  const theme = useTheme();
+  const isUpSmallScreens = useMediaQuery(theme.breakpoints.up('sm'));
   const { filterData } = useContext(IndexedDBContext);
   return (
-    <Search>
+    <Search sx={{ border: isUpSmallScreens ? 'none' : '1px solid #d1d1d1' }}>
       <SearchIconWrapper>
         <StyledSearchIcon />
       </SearchIconWrapper>
